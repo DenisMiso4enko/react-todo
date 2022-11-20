@@ -1,4 +1,15 @@
 import React, { useState } from "react";
+import {
+  ListItem,
+  List,
+  ListItemAvatar,
+  ListItemText,
+  Button,
+  Modal,
+  makeStyles,
+} from "@material-ui/core";
+import { db } from "../../firebase";
+import { updateDoc, doc } from "firebase/firestore";
 
 const Todo = ({
   todo,
@@ -27,8 +38,31 @@ const Todo = ({
   };
   const [newTitle, setNewTitle] = useState(todo.title);
   const [newDescription, setNewDescription] = useState(todo.description);
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState(todo.title);
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
+  const updateTodo = async (todo, title) => {
+    // update to do with the new input text
+
+    await updateDoc(doc(db, "todos", todo.id), { title: title });
+
+    setOpen(false);
+  };
   return (
     <div className="todo">
+      <Modal open={open} onClose={(e) => setOpen(false)}>
+        <div className="modal">
+          <h1>I am a model</h1>
+          <input
+            placeholder={todo.title}
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+          <Button onClick={() => updateTodo(todo, input)}>Update Todo</Button>
+        </div>
+      </Modal>
       <input
         type="text"
         value={todo.title === "" ? newTitle : todo.title}
@@ -56,6 +90,7 @@ const Todo = ({
         <button
           className="btn-edit"
           onClick={() => handlerEditTodo(todo, newTitle)}
+          // onClick={(e) => setOpen(true)}
         >
           edit
         </button>
@@ -65,6 +100,7 @@ const Todo = ({
         >
           delete
         </button>
+        <Button onClick={(e) => setOpen(true)}>Edit</Button>
       </div>
     </div>
   );

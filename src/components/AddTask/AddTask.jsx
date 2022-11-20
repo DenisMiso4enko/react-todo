@@ -6,6 +6,7 @@ const AddTodo = () => {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoDescription, setTodoDescription] = useState("");
   const [todoDate, setTodoDate] = useState("");
+  // const fileInput = React.createRef();
   const handlerChangeTodoTitle = (e) => {
     setTodoTitle(e.target.value);
   };
@@ -26,6 +27,7 @@ const AddTodo = () => {
         date: todoDate,
         isCompleted: false,
       });
+
       setTodoTitle("");
       setTodoDescription("");
       setTodoDate("");

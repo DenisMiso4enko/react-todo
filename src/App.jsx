@@ -24,8 +24,8 @@ function App() {
       });
       setTodos(todosArray);
     });
-    console.log(todos);
     return () => unsub();
+
   }, []);
 
   const handlerEditTodo = async (todo, title) => {
