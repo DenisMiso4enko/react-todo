@@ -8,6 +8,17 @@ function App() {
   const [tasksList, setTasksList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handlerUpdateTodo = (newTitle, id) => {
+    setTasksList(
+      tasksList.map((todo) => {
+        if (todo.id === id) {
+          todo.todoTitle = newTitle;
+        }
+        return todo;
+      })
+    );
+  };
+
   async function fetchTodos() {
     setIsLoading(true);
     let response = await fetch(
@@ -32,7 +43,11 @@ function App() {
       <div className="todos-container">
         {isLoading && <p>Идет загрузка данных</p>}
         {tasksList.map((todo) => (
-          <Todo key={todo.id} todo={todo} />
+          <Todo
+            key={todo.id}
+            todo={todo}
+            handlerUpdateTodo={handlerUpdateTodo}
+          />
         ))}
       </div>
     </div>
