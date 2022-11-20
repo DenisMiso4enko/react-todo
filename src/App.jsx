@@ -14,15 +14,18 @@ import Todo from "./components/Todo/Todo";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const q = query(collection(db, "todos"));
+    setIsLoading(true);
     const unsub = onSnapshot(q, (querySnapshot) => {
       let todosArray = [];
       querySnapshot.forEach((doc) => {
         todosArray.push({ ...doc.data(), id: doc.id });
       });
       setTodos(todosArray);
+      setIsLoading(false);
     });
     console.log(todos);
     return () => unsub();
@@ -47,6 +50,7 @@ function App() {
     <div className="App">
       <AddTodo />
       <div className="todos-container">
+        {isLoading && "Идет загрузка..."}
         {todos.map((todo) => (
           <Todo
             key={todo.id}

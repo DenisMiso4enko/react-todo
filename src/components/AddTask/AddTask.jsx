@@ -6,6 +6,7 @@ const AddTodo = () => {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoDescription, setTodoDescription] = useState("");
   const [todoDate, setTodoDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const handlerChangeTodoTitle = (e) => {
     setTodoTitle(e.target.value);
   };
@@ -18,25 +19,39 @@ const AddTodo = () => {
 
   const handelFormSubmit = async (e) => {
     e.preventDefault();
-    if (todoTitle !== "") {
-      await addDoc(collection(db, "todos"), {
-        id: Date.now(),
-        title: todoTitle,
-        description: todoDescription,
-        date: todoDate,
-        isCompleted: false,
-      });
-      setTodoTitle("");
-      setTodoDescription("");
-      setTodoDate("");
+    try {
+      if (todoTitle !== "") {
+        setIsLoading(true);
+        await addDoc(collection(db, "todos"), {
+          id: Date.now(),
+          title: todoTitle,
+          description: todoDescription,
+          date: todoDate,
+          isCompleted: false,
+        });
+        setIsLoading(false);
+        setTodoTitle("");
+        setTodoDescription("");
+        setTodoDate("");
+      }
+    } catch (error) {
+      alert(error);
     }
+  };
+  const formStyle = {
+    display: "flex",
+    alightItems: "center",
+    flexDirection: "column",
+    maxWidth: "600px",
+    margin: "0 auto",
   };
 
   return (
     <div className="add-card">
       <h2 className="add-card__title">Add ToDo..</h2>
-      <form onSubmit={handelFormSubmit}>
+      <form onSubmit={handelFormSubmit} style={formStyle}>
         <input
+          required
           name="title"
           type="text"
           placeholder="Title..."
@@ -44,6 +59,7 @@ const AddTodo = () => {
           onChange={handlerChangeTodoTitle}
         />
         <textarea
+          required
           name="description"
           placeholder="Description"
           value={todoDescription}
@@ -51,6 +67,7 @@ const AddTodo = () => {
         ></textarea>
         <div className="">
           <input
+            required
             name="date"
             type="date"
             value={todoDate}
@@ -58,7 +75,7 @@ const AddTodo = () => {
           />
           <input type="file" name="file" />
         </div>
-        <button type="submit">Add Todo</button>
+        <button type="submit">{isLoading ? "Adding..." : "Add Todo"}</button>
       </form>
     </div>
   );
