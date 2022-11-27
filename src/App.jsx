@@ -46,6 +46,11 @@ function App() {
     await deleteDoc(doc(db, "todos", id));
   };
 
+  const addTag = () => {
+    const expr = new RegExp(/#\S+/g);
+    console.log();
+  };
+
   return (
     <div className="App">
       <AddTodo />

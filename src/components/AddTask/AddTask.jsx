@@ -16,6 +16,9 @@ const AddTodo = () => {
   const handlerChangeTodoData = (e) => {
     setTodoDate(e.target.value);
   };
+  // const addTag = () => {
+  //   return todoTitle.match(/#\S+/g);
+  // };
 
   const handelFormSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +27,11 @@ const AddTodo = () => {
         setIsLoading(true);
         await addDoc(collection(db, "todos"), {
           id: Date.now(),
-          title: todoTitle,
+          title: todoTitle.replace(/#\S+/g, ""),
           description: todoDescription,
           date: todoDate,
           isCompleted: false,
+          tag: todoTitle.match(/#\S+/g),
         });
         setIsLoading(false);
         setTodoTitle("");

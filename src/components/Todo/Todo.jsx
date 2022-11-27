@@ -77,6 +77,7 @@ const Todo = ({
         >
           delete
         </button>
+        <span>{todo.tag}</span>
       </div>
     </div>
   );
